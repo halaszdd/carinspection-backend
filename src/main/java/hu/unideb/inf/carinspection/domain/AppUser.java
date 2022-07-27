@@ -16,12 +16,12 @@ import java.util.List;
 public class AppUser {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public long id;
-    public String username;
-    public String password;
-    public String firstname;
-    public String lastname;
-    public String email;
+    private long id;
+    private String username;
+    private String password;
+    private String firstname;
+    private String lastname;
+    private String email;
     @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    public List<Car> cars;
+    private List<Car> cars;
 }

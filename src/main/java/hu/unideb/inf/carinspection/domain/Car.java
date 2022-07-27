@@ -1,9 +1,6 @@
 package hu.unideb.inf.carinspection.domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -16,10 +13,11 @@ import java.time.LocalDate;
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public long id;
+    private long id;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    public AppUser owner;
-    public String plateNumber;
-    public String vin;
-    public LocalDate expirationDate;
+    @ToString.Exclude
+    private AppUser owner;
+    private String plateNumber;
+    private String vin;
+    private LocalDate expirationDate;
 }
