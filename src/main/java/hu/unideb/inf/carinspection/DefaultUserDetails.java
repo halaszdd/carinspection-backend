@@ -1,6 +1,7 @@
 package hu.unideb.inf.carinspection;
 
 import hu.unideb.inf.carinspection.domain.AppUser;
+import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -9,6 +10,7 @@ import java.util.Collections;
 
 public class DefaultUserDetails implements UserDetails {
 
+    @Getter
     private final AppUser appUser;
 
     public DefaultUserDetails(AppUser appUser) {
