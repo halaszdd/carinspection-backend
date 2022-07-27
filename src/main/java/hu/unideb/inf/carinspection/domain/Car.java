@@ -1,6 +1,7 @@
 package hu.unideb.inf.carinspection.domain;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,6 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Builder
 public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

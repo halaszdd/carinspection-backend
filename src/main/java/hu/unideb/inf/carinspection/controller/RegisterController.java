@@ -20,13 +20,13 @@ public class RegisterController {
 
 
     @PostMapping("/register")
-    public void register(@RequestBody RegisterModel registerModel) {
+    public void register(@RequestBody RegisterUserModel registerUserModel) {
         appUserRepository.save(AppUser
                 .builder()
-                .username(registerModel.getUsername())
-                .password(passwordEncoder.encode(registerModel.getPassword()))
-                .email(registerModel.getEmail())
+                .username(registerUserModel.getUsername())
+                .password(passwordEncoder.encode(registerUserModel.getPassword()))
+                .email(registerUserModel.getEmail())
                 .build());
-        System.out.println(registerModel);
+        System.out.println(registerUserModel);
     }
 }
