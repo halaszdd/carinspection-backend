@@ -18,6 +18,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    public WebSecurityConfig(@Qualifier("defaultUserDetailsService") UserDetailsService userDetailsService) {
+        this.userDetailsService = userDetailsService;
+    }
+
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests(r -> {
@@ -25,7 +29,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
             r.antMatchers( "/register").permitAll();
             r.anyRequest().authenticated();
         }).formLogin()
-                .loginPage("/login")
+                .loginPage("/login").loginProcessingUrl("/api/login-process")
                 .permitAll()
                 .and()
                 .logout()
@@ -33,15 +37,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         System.out.println("valami");
     }
 
-    @Autowired
-    @Qualifier("defaultUserDetailsService")
-    private UserDetailsService userDetailsService;
+    private final UserDetailsService userDetailsService;
 
     @Bean
-    public PasswordEncoder encoder() {
-        //Todo login doesnt work
-        //return new BCryptPasswordEncoder();
-        return NoOpPasswordEncoder.getInstance();
+    public PasswordEncoder getPasswordEncoder() {
+        return new BCryptPasswordEncoder();
+        //return NoOpPasswordEncoder.getInstance();
     }
 
     @Override
