@@ -4,13 +4,14 @@ import hu.unideb.inf.carinspection.DefaultUserDetails;
 import hu.unideb.inf.carinspection.data.AppUserRepository;
 import hu.unideb.inf.carinspection.data.CarRepository;
 import hu.unideb.inf.carinspection.domain.Car;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 public class CarController {
@@ -36,8 +37,18 @@ public class CarController {
                 .build());
     }
 
-    @GetMapping("api/car/")
-    public List<Car> getCars() {
-        return carRepository.findAll();
+    @GetMapping("/api/car/{carId}")
+    public UserDetailsDTO.CarDTO getCar(@PathVariable long carId, @AuthenticationPrincipal DefaultUserDetails defaultUserDetails) {
+        Car car = carRepository.findById(carId).orElseThrow(() -> {throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "entity not found"
+        );});
+        //Todo Admin impl
+        if (car.getOwner()!=null && defaultUserDetails.getAppUser().getId() == car.getOwner().getId()) {
+            return new UserDetailsDTO.CarDTO(car);
+        }
+        else {
+            throw new AccessDeniedException("403 returned");
+        }
+
     }
 }

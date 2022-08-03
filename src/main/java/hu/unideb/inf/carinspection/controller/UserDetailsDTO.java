@@ -31,7 +31,7 @@ public class UserDetailsDTO {
     }
 
     @Value
-    private static class CarDTO {
+    public static class CarDTO {
 
         private long id;
         private String plateNumber;
