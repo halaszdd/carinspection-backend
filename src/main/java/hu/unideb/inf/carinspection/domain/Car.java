@@ -14,7 +14,7 @@ public class Car {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     @ToString.Exclude
     private AppUser owner;
     private String plateNumber;

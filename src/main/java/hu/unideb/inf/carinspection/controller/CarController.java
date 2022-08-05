@@ -42,13 +42,12 @@ public class CarController {
         Car car = carRepository.findById(carId).orElseThrow(() -> {throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND, "entity not found"
         );});
+
         //Todo Admin impl
         if (car.getOwner()!=null && defaultUserDetails.getAppUser().getId() == car.getOwner().getId()) {
             return new UserDetailsDTO.CarDTO(car);
         }
-        else {
-            throw new AccessDeniedException("403 returned");
-        }
 
+        throw new AccessDeniedException("403 returned");
     }
 }

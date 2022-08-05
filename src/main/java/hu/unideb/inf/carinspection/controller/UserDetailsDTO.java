@@ -1,10 +1,10 @@
 package hu.unideb.inf.carinspection.controller;
 
-import hu.unideb.inf.carinspection.domain.AppUser;
-import hu.unideb.inf.carinspection.domain.Car;
+import hu.unideb.inf.carinspection.domain.*;
 import lombok.Builder;
 import lombok.Value;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -44,5 +44,24 @@ public class UserDetailsDTO {
             expirationDate = car.getExpirationDate();
         }
 
+    }
+    @Value
+    public static class InspectionDTO {
+
+        private long id;
+        private Inspector inspector;
+        private Site site;
+        private LocalDate date;
+        private String result;
+        private String comment;
+
+        public InspectionDTO(Inspection inspection) {
+            id = inspection.getId();
+            inspector = inspection.getInspector();
+            site = inspection.getSite();
+            date = inspection.getDate();
+            result = inspection.getResult();
+            comment = inspection.getComment();
+        }
     }
 }

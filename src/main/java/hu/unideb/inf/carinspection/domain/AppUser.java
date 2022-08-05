@@ -22,6 +22,6 @@ public class AppUser {
     private String firstname;
     private String lastname;
     private String email;
-    @OneToMany(mappedBy = "owner", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "owner", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private List<Car> cars;
 }

@@ -12,8 +12,9 @@ import javax.persistence.*;
 @Entity
 public class Inspector {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
-    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY,cascade = CascadeType.MERGE)
     public Site site;
     public String firstName;
     public String lastName;
