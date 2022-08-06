@@ -54,4 +54,6 @@ public class DefaultUserDetails implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
+    public boolean isAdmin() {return getAuthorities().contains(new SimpleGrantedAuthority("admin"));}
 }

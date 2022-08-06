@@ -7,8 +7,11 @@ import hu.unideb.inf.carinspection.domain.Car;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+
+import javax.validation.Valid;
 
 @RestController
 public class CarController {
@@ -23,9 +26,8 @@ public class CarController {
     }
 
     @PostMapping("/api/car/register/")
-    public void registerCar(@RequestBody RegisterCarModel registerCarModel, @AuthenticationPrincipal DefaultUserDetails defaultUserDetails)
+    public void registerCar(@RequestBody @Valid RegisterCarModel registerCarModel, @AuthenticationPrincipal DefaultUserDetails defaultUserDetails)
     {
-        System.out.println(registerCarModel);
         carRepository.save(Car.builder()
                 .owner(appUserRepository.findById(defaultUserDetails.getAppUser().getId()).get())
                 .plateNumber(registerCarModel.getPlateNumber())
@@ -40,8 +42,7 @@ public class CarController {
                 HttpStatus.NOT_FOUND, "entity not found"
         );});
 
-        //Todo Admin impl
-        if (car.getOwner()!=null && defaultUserDetails.getAppUser().getId() == car.getOwner().getId()) {
+        if (defaultUserDetails.isAdmin() || car.getOwner()!=null && defaultUserDetails.getAppUser().getId() == car.getOwner().getId()) {
             return new CarDTO(car);
         }
 

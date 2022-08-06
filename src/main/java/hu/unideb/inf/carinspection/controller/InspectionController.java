@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -42,7 +43,7 @@ public class InspectionController {
         );});
 
         List<Inspection> inspections = inspectionRepository.findAllByCar(car);
-        if(car.getOwner() != null && defaultUserDetails.getAppUser().getId() == car.getOwner().getId()){
+        if(defaultUserDetails.isAdmin() || car.getOwner() != null && defaultUserDetails.getAppUser().getId() == car.getOwner().getId()){
             return inspections.stream().map(InspectionDTO::new).toList();
         }
 
@@ -50,8 +51,7 @@ public class InspectionController {
     }
 
     @PostMapping("/api/inspection/signup/")
-    public void signUpInspection(@RequestBody SignUpInspectionModel signUpInspectionModel, @AuthenticationPrincipal DefaultUserDetails defaultUserDetails) {
-        System.out.println(signUpInspectionModel);
+    public void signUpInspection(@RequestBody @Valid SignUpInspectionModel signUpInspectionModel, @AuthenticationPrincipal DefaultUserDetails defaultUserDetails) {
         Car car = carRepository.findById(signUpInspectionModel.getCarId()).orElseThrow(() -> {throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND, "car not found"
         );});
@@ -60,9 +60,8 @@ public class InspectionController {
                 HttpStatus.NOT_FOUND, "site not found"
         );});
 
-        if(car.getOwner() != null && defaultUserDetails.getAppUser().getId() == car.getOwner().getId())
+        if(defaultUserDetails.isAdmin() || car.getOwner() != null && defaultUserDetails.getAppUser().getId() == car.getOwner().getId())
         {
-            System.out.println(signUpInspectionModel);
             inspectionRepository.save(Inspection.builder()
                     .car(car)
                     .site(site)
@@ -76,10 +75,14 @@ public class InspectionController {
 
     @PutMapping("/api/inspection/modify/{inspectionId}")
     @Transactional
-    public Inspection modifyInspection(@RequestBody ModifyInspectionModel modifyInspectionModel,
+    public InspectionDTO modifyInspection(@RequestBody  @Valid ModifyInspectionModel modifyInspectionModel,
                                        @PathVariable long inspectionId,
                                        @AuthenticationPrincipal DefaultUserDetails defaultUserDetails) {
-        //Todo roles admin impl
+
+        if(!defaultUserDetails.isAdmin()) {
+            throw new AccessDeniedException("403 returned");
+        }
+
         Inspection inspection = inspectionRepository.findById(inspectionId).orElseThrow(() -> {throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND, "inspection not found"
         );});
@@ -113,6 +116,6 @@ public class InspectionController {
         if (modifyInspectionModel.comment != null) {
             inspection.setComment(modifyInspectionModel.getComment());
         }
-        return null;
+        return new InspectionDTO(inspection);
     }
 }
