@@ -21,7 +21,7 @@ public class Inspection {
     public Car car;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     public Inspector inspector;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     public Site site;
     public LocalDate date;
     public String result;

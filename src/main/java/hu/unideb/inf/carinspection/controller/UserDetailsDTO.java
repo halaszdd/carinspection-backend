@@ -1,8 +1,7 @@
 package hu.unideb.inf.carinspection.controller;
 
 import hu.unideb.inf.carinspection.domain.*;
-import lombok.Builder;
-import lombok.Value;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -45,7 +44,8 @@ public class UserDetailsDTO {
         }
 
     }
-    @Value
+    @Data
+    @NoArgsConstructor
     public static class InspectionDTO {
 
         private long id;

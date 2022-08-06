@@ -9,8 +9,11 @@ import java.time.LocalDate;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SignUpInspectionModel {
-    private long carId;
-    private long siteId;
-    private LocalDate date;
+public class ModifyInspectionModel {
+    public Long carId;
+    public Long inspectorId;
+    public Long siteId;
+    public LocalDate date;
+    public String result;
+    public String comment;
 }

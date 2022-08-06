@@ -3,6 +3,7 @@ package hu.unideb.inf.carinspection.controller;
 import hu.unideb.inf.carinspection.DefaultUserDetails;
 import hu.unideb.inf.carinspection.data.CarRepository;
 import hu.unideb.inf.carinspection.data.InspectionRepository;
+import hu.unideb.inf.carinspection.data.InspectorRepository;
 import hu.unideb.inf.carinspection.data.SiteRepository;
 import hu.unideb.inf.carinspection.domain.Car;
 import hu.unideb.inf.carinspection.domain.Inspection;
@@ -13,6 +14,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @RestController
@@ -24,10 +26,13 @@ public class InspectionController {
 
     private final SiteRepository siteRepository;
 
-    public InspectionController(CarRepository carRepository, InspectionRepository inspectionRepository, SiteRepository siteRepository) {
+    private final InspectorRepository inspectorRepository;
+
+    public InspectionController(CarRepository carRepository, InspectionRepository inspectionRepository, SiteRepository siteRepository, InspectorRepository inspectorRepository) {
         this.carRepository = carRepository;
         this.inspectionRepository = inspectionRepository;
         this.siteRepository = siteRepository;
+        this.inspectorRepository = inspectorRepository;
     }
 
     @GetMapping("/api/inspection/details/{carId}")
@@ -67,5 +72,47 @@ public class InspectionController {
         }
 
         throw new AccessDeniedException("403 returned");
+    }
+
+    @PutMapping("/api/inspection/modify/{inspectionId}")
+    @Transactional
+    public Inspection modifyInspection(@RequestBody ModifyInspectionModel modifyInspectionModel,
+                                       @PathVariable long inspectionId,
+                                       @AuthenticationPrincipal DefaultUserDetails defaultUserDetails) {
+        //Todo roles admin impl
+        Inspection inspection = inspectionRepository.findById(inspectionId).orElseThrow(() -> {throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "inspection not found"
+        );});
+
+        if (modifyInspectionModel.carId != null) {
+            inspection.setCar(carRepository.findById(modifyInspectionModel.getCarId()).orElseThrow(() -> {throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "car not found"
+            );}));
+        }
+
+        if (modifyInspectionModel.inspectorId != null) {
+            inspection.setInspector(inspectorRepository.findById(modifyInspectionModel.getInspectorId()).orElseThrow(() -> {throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "inspector not found"
+            );}));
+        }
+
+        if (modifyInspectionModel.siteId != null) {
+            inspection.setSite(siteRepository.findById(modifyInspectionModel.getSiteId()).orElseThrow(() -> {throw new ResponseStatusException(
+                    HttpStatus.NOT_FOUND, "site not found"
+            );}));
+        }
+
+        if (modifyInspectionModel.date != null) {
+            inspection.setDate(modifyInspectionModel.getDate());
+        }
+
+        if (modifyInspectionModel.result != null) {
+            inspection.setResult(modifyInspectionModel.getResult());
+        }
+
+        if (modifyInspectionModel.comment != null) {
+            inspection.setComment(modifyInspectionModel.getComment());
+        }
+        return null;
     }
 }
