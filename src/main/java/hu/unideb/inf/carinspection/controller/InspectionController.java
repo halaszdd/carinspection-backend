@@ -36,14 +36,14 @@ public class InspectionController {
     }
 
     @GetMapping("/api/inspection/details/{carId}")
-    public List<UserDetailsDTO.InspectionDTO> getInspection(@PathVariable long carId, @AuthenticationPrincipal DefaultUserDetails defaultUserDetails) {
+    public List<InspectionDTO> getInspection(@PathVariable long carId, @AuthenticationPrincipal DefaultUserDetails defaultUserDetails) {
         Car car = carRepository.findById(carId).orElseThrow(() -> {throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND, "entity not found"
         );});
 
         List<Inspection> inspections = inspectionRepository.findAllByCar(car);
         if(car.getOwner() != null && defaultUserDetails.getAppUser().getId() == car.getOwner().getId()){
-            return inspections.stream().map(UserDetailsDTO.InspectionDTO::new).toList();
+            return inspections.stream().map(InspectionDTO::new).toList();
         }
 
         throw new AccessDeniedException("403 returned");

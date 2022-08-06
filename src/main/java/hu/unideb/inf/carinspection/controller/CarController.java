@@ -10,9 +10,6 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.NoSuchElementException;
-
 @RestController
 public class CarController {
 
@@ -38,14 +35,14 @@ public class CarController {
     }
 
     @GetMapping("/api/car/{carId}")
-    public UserDetailsDTO.CarDTO getCar(@PathVariable long carId, @AuthenticationPrincipal DefaultUserDetails defaultUserDetails) {
+    public CarDTO getCar(@PathVariable long carId, @AuthenticationPrincipal DefaultUserDetails defaultUserDetails) {
         Car car = carRepository.findById(carId).orElseThrow(() -> {throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND, "entity not found"
         );});
 
         //Todo Admin impl
         if (car.getOwner()!=null && defaultUserDetails.getAppUser().getId() == car.getOwner().getId()) {
-            return new UserDetailsDTO.CarDTO(car);
+            return new CarDTO(car);
         }
 
         throw new AccessDeniedException("403 returned");
