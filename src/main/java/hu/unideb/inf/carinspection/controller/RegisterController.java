@@ -1,6 +1,7 @@
 package hu.unideb.inf.carinspection.controller;
 
 import hu.unideb.inf.carinspection.data.AppUserRepository;
+import hu.unideb.inf.carinspection.data.GroupRepository;
 import hu.unideb.inf.carinspection.domain.AppUser;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,8 +15,12 @@ public class RegisterController {
 
     private final PasswordEncoder passwordEncoder;
 
-    public RegisterController(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder) {this.appUserRepository = appUserRepository;
+    private final GroupRepository groupRepository;
+
+    public RegisterController(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder, GroupRepository groupRepository) {
+        this.appUserRepository = appUserRepository;
         this.passwordEncoder = passwordEncoder;
+        this.groupRepository = groupRepository;
     }
 
 
@@ -26,6 +31,7 @@ public class RegisterController {
                 .username(registerUserModel.getUsername())
                 .password(passwordEncoder.encode(registerUserModel.getPassword()))
                 .email(registerUserModel.getEmail())
+                .group(groupRepository.findByGroupName("customer"))
                 .build());
         System.out.println(registerUserModel);
     }

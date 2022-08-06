@@ -24,4 +24,6 @@ public class AppUser {
     private String email;
     @OneToMany(mappedBy = "owner", cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     private List<Car> cars;
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    private Group group;
 }
