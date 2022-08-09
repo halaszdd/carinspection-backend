@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
