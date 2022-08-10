@@ -50,7 +50,7 @@ public class InspectionController {
         throw new AccessDeniedException("403 returned");
     }
 
-    @PostMapping("/api/inspection/signup/")
+    @PostMapping("/api/inspection/signup")
     public void signUpInspection(@RequestBody @Valid SignUpInspectionModel signUpInspectionModel, @AuthenticationPrincipal DefaultUserDetails defaultUserDetails) {
         Car car = carRepository.findById(signUpInspectionModel.getCarId()).orElseThrow(() -> {throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND, "car not found"

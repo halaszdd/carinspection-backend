@@ -27,12 +27,22 @@ public class DefaultUserDetails implements UserDetails {
 
     @Override
     public String getPassword() {
-        return appUser.getPassword();
+        if (appUser == null) {
+            return "";
+        }
+        else{
+            return appUser.getPassword();
+        }
     }
 
     @Override
     public String getUsername() {
-        return appUser.getUsername();
+        if (appUser == null) {
+            return "";
+        }
+        else {
+            return appUser.getUsername();
+        }
     }
 
     @Override

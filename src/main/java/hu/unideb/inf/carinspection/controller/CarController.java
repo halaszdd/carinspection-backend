@@ -25,7 +25,7 @@ public class CarController {
         this.appUserRepository = appUserRepository;
     }
 
-    @PostMapping("/api/car/register/")
+    @PostMapping("/api/car/register")
     public void registerCar(@RequestBody @Valid RegisterCarModel registerCarModel, @AuthenticationPrincipal DefaultUserDetails defaultUserDetails)
     {
         carRepository.save(Car.builder()

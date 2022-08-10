@@ -16,7 +16,7 @@ public class SiteController {
         this.siteRepository = siteRepository;
     }
 
-    @GetMapping("/api/site/all/")
+    @GetMapping("/api/site/all")
     public List<Site> getAllSites() {
         return siteRepository.findAll();
     }
