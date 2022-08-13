@@ -13,6 +13,7 @@ import java.time.LocalDate;
 public class InspectionDTO {
 
     private long id;
+    private long carId;
     private Inspector inspector;
     private Site site;
     private LocalDate date;
@@ -21,6 +22,7 @@ public class InspectionDTO {
 
     public InspectionDTO(Inspection inspection) {
         id = inspection.getId();
+        carId = inspection.getCar().getId();
         inspector = inspection.getInspector();
         site = inspection.getSite();
         date = inspection.getDate();

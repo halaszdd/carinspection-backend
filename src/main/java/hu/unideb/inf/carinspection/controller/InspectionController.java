@@ -65,7 +65,6 @@ public class InspectionController {
             inspectionRepository.save(Inspection.builder()
                     .car(car)
                     .site(site)
-                    .date(signUpInspectionModel.getDate())
                     .build());
             return;
         }

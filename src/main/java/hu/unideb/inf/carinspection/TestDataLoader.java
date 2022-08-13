@@ -40,5 +40,6 @@ public class TestDataLoader implements CommandLineRunner {
         inspectionRepository.save(Inspection.builder().car(car).inspector(null).site(null).build());
         inspectionRepository.save(Inspection.builder().car(null).inspector(null).site(null).build());
         siteRepository.save(Site.builder().name("Debrecen BartokBela u").build());
+        siteRepository.save(Site.builder().name("Budapest Hungária k.u").build());
     }
 }
