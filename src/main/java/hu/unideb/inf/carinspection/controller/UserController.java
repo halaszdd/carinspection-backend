@@ -5,8 +5,12 @@ import hu.unideb.inf.carinspection.DefaultUserDetails;
 import hu.unideb.inf.carinspection.data.AppUserRepository;
 
 
+import hu.unideb.inf.carinspection.domain.AppUser;
+import hu.unideb.inf.carinspection.domain.Car;
+import hu.unideb.inf.carinspection.domain.Inspection;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,5 +50,16 @@ public class UserController {
             throw new AccessDeniedException("403 returned");
         }
         return new UserDetailsDTO(appUserRepository.findById(userId).orElseThrow(UserNotFoundException::new));
+    }
+
+    @GetMapping("/api/user/inspection")
+    @Transactional
+    public List<InspectionDTO> getUserInspection(@AuthenticationPrincipal DefaultUserDetails defaultUserDetails) {
+        AppUser appUser = appUserRepository.findById(defaultUserDetails.getAppUser().getId()).get();
+        List<Car> car = appUser.getCars();
+        List<Inspection> inspections = car.stream()
+                .flatMap(carElement -> carElement.getInspections().stream())
+                .toList();
+        return inspections.stream().map(InspectionDTO::new).toList();
     }
 }

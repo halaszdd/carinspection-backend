@@ -4,6 +4,7 @@ import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
@@ -20,4 +21,6 @@ public class Car {
     private String plateNumber;
     private String vin;
     private LocalDate expirationDate;
+    @OneToMany(mappedBy = "car", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    private List<Inspection> inspections;
 }
