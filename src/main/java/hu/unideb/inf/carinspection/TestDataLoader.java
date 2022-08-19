@@ -34,12 +34,13 @@ public class TestDataLoader implements CommandLineRunner {
     public void run(String... args) throws Exception {
         groupRepository.save(Group.builder().groupName("customer").build());
         groupRepository.save(Group.builder().groupName("admin").build());
-        appUserRepository.save(AppUser.builder().username("alice").password(passwordEncoder.encode("123")).group(groupRepository.findByGroupName("admin")).build());
+        appUserRepository.save(AppUser.builder().username("alice").password(passwordEncoder.encode("123")).firstname("Alice").lastname("Smith").email("alicemail@gmail.com").group(groupRepository.findByGroupName("admin")).build());
         carRepository.save(Car.builder().owner(appUserRepository.findByUsername("alice")).expirationDate(null).vin("01234567899876543").plateNumber("DEF-456").build());
         Car car = carRepository.findAll().get(0);
         inspectionRepository.save(Inspection.builder().car(car).inspector(null).site(null).build());
-        inspectionRepository.save(Inspection.builder().car(null).inspector(null).site(null).build());
+        //inspectionRepository.save(Inspection.builder().car(null).inspector(null).site(null).build());
         siteRepository.save(Site.builder().name("Debrecen BartokBela u").build());
         siteRepository.save(Site.builder().name("Budapest Hungária k.u").build());
+        siteRepository.save(Site.builder().name("A 67-es út").build());
     }
 }

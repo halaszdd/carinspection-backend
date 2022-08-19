@@ -15,6 +15,7 @@ public class UserDetailsDTO {
     private String lastname;
     private String email;
     private List<CarDTO> cars;
+    private GroupDTO group;
 
     public UserDetailsDTO(AppUser appUser) {
 
@@ -25,6 +26,7 @@ public class UserDetailsDTO {
         lastname = appUser.getLastname();
         email = appUser.getEmail();
         cars = appUser.getCars().stream().map(CarDTO::new).toList();
+        group = new GroupDTO(appUser.getGroup());
     }
 
 }

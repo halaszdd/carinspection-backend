@@ -7,16 +7,17 @@ import lombok.NoArgsConstructor;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 public class RegisterUserModel {
     @NotNull
-    @Min(4)
+    @Size(min = 4)
     private String username;
     @NotNull
-    @Min(4)
+    @Size(min = 4)
     private String password;
     @NotNull
     @Pattern(regexp = ".*@.*")

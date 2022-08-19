@@ -72,6 +72,14 @@ public class InspectionController {
         throw new AccessDeniedException("403 returned");
     }
 
+    @GetMapping("/api/inspection/all")
+    public List<InspectionDTO> getAllUser(@AuthenticationPrincipal DefaultUserDetails defaultUserDetails) {
+        if(!defaultUserDetails.isAdmin()) {
+            throw new AccessDeniedException("403 returned");
+        }
+        return inspectionRepository.findAll().stream().map(InspectionDTO::new).toList();
+    }
+
     @PutMapping("/api/inspection/modify/{inspectionId}")
     @Transactional
     public InspectionDTO modifyInspection(@RequestBody  @Valid ModifyInspectionModel modifyInspectionModel,

@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RestController
 public class CarController {
@@ -47,5 +48,13 @@ public class CarController {
         }
 
         throw new AccessDeniedException("403 returned");
+    }
+
+    @GetMapping("/api/car/all")
+    public List<CarDTO> getAllUser(@AuthenticationPrincipal DefaultUserDetails defaultUserDetails) {
+        if(!defaultUserDetails.isAdmin()) {
+            throw new AccessDeniedException("403 returned");
+        }
+        return carRepository.findAll().stream().map(CarDTO::new).toList();
     }
 }
