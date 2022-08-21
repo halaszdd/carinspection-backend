@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -56,5 +57,32 @@ public class CarController {
             throw new AccessDeniedException("403 returned");
         }
         return carRepository.findAll().stream().map(CarDTO::new).toList();
+    }
+
+    @PutMapping("/api/car/modify/{carId}")
+    @Transactional
+    public CarDTO modifyCar(@RequestBody @Valid ModifyCarModel modifyCarModel,
+                            @PathVariable long carId,
+                            @AuthenticationPrincipal DefaultUserDetails defaultUserDetails) {
+
+        if(!defaultUserDetails.isAdmin()) {
+            throw new AccessDeniedException("403 returned");
+        }
+
+        Car car = carRepository.findById(carId).orElseThrow(() -> {throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "car not found");});
+
+        if(modifyCarModel.plateNumber != null) {
+            car.setPlateNumber(modifyCarModel.getPlateNumber());
+        }
+
+        if(modifyCarModel.vin != null) {
+            car.setVin(modifyCarModel.getVin());
+        }
+
+        if(modifyCarModel.expirationDate != null) {
+            car.setExpirationDate(modifyCarModel.getExpirationDate());
+        }
+        return new CarDTO(car);
     }
 }
