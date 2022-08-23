@@ -8,14 +8,16 @@ import hu.unideb.inf.carinspection.data.AppUserRepository;
 import hu.unideb.inf.carinspection.domain.AppUser;
 import hu.unideb.inf.carinspection.domain.Car;
 import hu.unideb.inf.carinspection.domain.Inspection;
+import org.apache.catalina.User;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -61,5 +63,32 @@ public class UserController {
                 .flatMap(carElement -> carElement.getInspections().stream())
                 .toList();
         return inspections.stream().map(InspectionDTO::new).toList();
+    }
+
+    @PutMapping("/api/user/modify/{userId}")
+    @Transactional
+    public UserDetailsDTO modifyUser(@RequestBody @Valid ModifyUserDetailsModel modifyUserDetailsModel,
+                                     @PathVariable long userId,
+                                     @AuthenticationPrincipal DefaultUserDetails defaultUserDetails) {
+
+        if(!defaultUserDetails.isAdmin()) {
+            throw new AccessDeniedException("403 returned");
+        }
+
+        AppUser appUser = appUserRepository.findById(userId).orElseThrow(() -> {throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "User not found");});
+
+        if(modifyUserDetailsModel.firstname != null) {
+            appUser.setFirstname(modifyUserDetailsModel.getFirstname());
+        }
+
+        if (modifyUserDetailsModel.lastname != null) {
+            appUser.setLastname(modifyUserDetailsModel.getLastname());
+        }
+
+        if (modifyUserDetailsModel.email != null) {
+            appUser.setEmail(modifyUserDetailsModel.getEmail());
+        }
+        return new UserDetailsDTO(appUser);
     }
 }
