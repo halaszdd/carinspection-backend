@@ -21,13 +21,16 @@ public class TestDataLoader implements CommandLineRunner {
 
     private final GroupRepository groupRepository;
 
-    public TestDataLoader(AppUserRepository appUserRepository, CarRepository carRepository, InspectionRepository inspectionRepository, PasswordEncoder passwordEncoder, SiteRepository siteRepository, GroupRepository groupRepository) {
+    private final InspectorRepository inspectorRepository;
+
+    public TestDataLoader(AppUserRepository appUserRepository, CarRepository carRepository, InspectionRepository inspectionRepository, PasswordEncoder passwordEncoder, SiteRepository siteRepository, GroupRepository groupRepository, InspectorRepository inspectorRepository) {
         this.appUserRepository = appUserRepository;
         this.carRepository = carRepository;
         this.inspectionRepository = inspectionRepository;
         this.passwordEncoder = passwordEncoder;
         this.siteRepository = siteRepository;
         this.groupRepository = groupRepository;
+        this.inspectorRepository = inspectorRepository;
     }
 
     @Override
@@ -42,5 +45,7 @@ public class TestDataLoader implements CommandLineRunner {
         siteRepository.save(Site.builder().name("Debrecen BartokBela u").build());
         siteRepository.save(Site.builder().name("Budapest Hungária k.u").build());
         siteRepository.save(Site.builder().name("A 67-es út").build());
+        inspectorRepository.save(Inspector.builder().firstName("Gábor").lastName("Halász").build());
+        inspectorRepository.save(Inspector.builder().firstName("Árpád").lastName("Tóth").build());
     }
 }
