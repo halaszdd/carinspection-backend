@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 
 @Data
@@ -19,9 +20,11 @@ public class Inspection {
     public long id;
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     public Car car;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @NotNull
     public Inspector inspector;
     @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
+    @NotNull
     public Site site;
     public LocalDate date;
     public String result;
