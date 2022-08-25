@@ -71,7 +71,7 @@ public class UserController {
                                      @PathVariable long userId,
                                      @AuthenticationPrincipal DefaultUserDetails defaultUserDetails) {
 
-        if(!defaultUserDetails.isAdmin()) {
+        if(!(defaultUserDetails.isAdmin() || userId == defaultUserDetails.getAppUser().getId())) {
             throw new AccessDeniedException("403 returned");
         }
 

@@ -43,6 +43,8 @@ public class RegisterController {
                 .builder()
                 .username(registerUserModel.getUsername())
                 .password(passwordEncoder.encode(registerUserModel.getPassword()))
+                .firstname(registerUserModel.getFirstname())
+                .lastname(registerUserModel.getLastname())
                 .email(registerUserModel.getEmail())
                 .group(groupRepository.findByGroupName("customer"))
                 .build());

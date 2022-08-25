@@ -19,6 +19,8 @@ public class RegisterUserModel {
     @NotNull
     @Size(min = 4)
     private String password;
+    private String firstname;
+    private String lastname;
     @NotNull
     @Pattern(regexp = ".*@.*")
     private String email;
