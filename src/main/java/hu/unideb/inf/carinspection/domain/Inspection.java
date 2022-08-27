@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import java.time.LocalDate;
 
 @Data
@@ -27,6 +28,7 @@ public class Inspection {
     @NotNull
     public Site site;
     public LocalDate date;
+    @Pattern(regexp = "[A-Z ]*")
     public String result;
     public String comment;
 }

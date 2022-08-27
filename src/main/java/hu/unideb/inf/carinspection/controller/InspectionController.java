@@ -65,6 +65,8 @@ public class InspectionController {
             inspectionRepository.save(Inspection.builder()
                     .car(car)
                     .site(site)
+                    .inspector(inspectorRepository.findByFirstName("No Inspector"))
+                    .result("PENDING")
                     .build());
             return;
         }
@@ -78,6 +80,25 @@ public class InspectionController {
             throw new AccessDeniedException("403 returned");
         }
         return inspectionRepository.findAll().stream().map(InspectionDTO::new).toList();
+    }
+
+    @PostMapping("/api/inspection/{inspectionId}/withdraw")
+    @Transactional
+    public InspectionDTO withdrawInspection(@AuthenticationPrincipal DefaultUserDetails defaultUserDetails, @PathVariable long inspectionId) {
+        Inspection inspection = inspectionRepository.findById(inspectionId).orElseThrow(() -> {throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "inspection not found"
+        );});
+
+        if (inspection.getCar().getOwner().getId() != defaultUserDetails.getAppUser().getId()) {
+            throw new AccessDeniedException("403 returned");
+        }
+
+        if("PENDING".equals(inspection.getResult())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
+        }
+
+        inspection.setResult("WITHDRAWN");
+        return new InspectionDTO(inspection);
     }
 
     @PutMapping("/api/inspection/modify/{inspectionId}")
@@ -117,7 +138,7 @@ public class InspectionController {
         }
 
         if (modifyInspectionModel.result != null) {
-            inspection.setResult(modifyInspectionModel.getResult());
+            inspection.setResult(modifyInspectionModel.getResult().toUpperCase());
         }
 
         if (modifyInspectionModel.comment != null) {

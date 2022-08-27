@@ -6,4 +6,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface InspectorRepository extends JpaRepository<Inspector, Long> {
+
+    Inspector findByFirstName(String firstname);
 }
