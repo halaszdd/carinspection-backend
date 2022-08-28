@@ -30,8 +30,17 @@ public class CarController {
     @PostMapping("/api/car/register")
     public void registerCar(@RequestBody @Valid RegisterCarModel registerCarModel, @AuthenticationPrincipal DefaultUserDetails defaultUserDetails)
     {
-        carRepository.save(Car.builder()
-                .owner(appUserRepository.findById(defaultUserDetails.getAppUser().getId()).get())
+        final var carBuilder =Car.builder();
+        if (defaultUserDetails.isAdmin() && registerCarModel.getOwnerId() != null) {
+            final var owner = appUserRepository.findById(registerCarModel.getOwnerId()).orElseThrow(() -> {throw new ResponseStatusException(
+                    HttpStatus.BAD_REQUEST, "No such user");});
+            carBuilder.owner(owner);
+        }
+        else {
+            final var owner = appUserRepository.findById(defaultUserDetails.getAppUser().getId()).get();
+            carBuilder.owner(owner);
+        }
+        carRepository.save(carBuilder
                 .plateNumber(registerCarModel.getPlateNumber())
                 .vin(registerCarModel.getVin())
                 .expirationDate(registerCarModel.getExpirationDate())

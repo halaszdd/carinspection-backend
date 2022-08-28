@@ -1,6 +1,7 @@
 package hu.unideb.inf.carinspection.domain;
 
 import lombok.*;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 import java.time.LocalDate;

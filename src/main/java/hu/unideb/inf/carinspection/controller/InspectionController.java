@@ -93,7 +93,7 @@ public class InspectionController {
             throw new AccessDeniedException("403 returned");
         }
 
-        if("PENDING".equals(inspection.getResult())) {
+        if(!("PENDING".equals(inspection.getResult()))) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST);
         }
 
