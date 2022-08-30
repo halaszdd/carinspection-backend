@@ -81,15 +81,15 @@ public class CarController {
         Car car = carRepository.findById(carId).orElseThrow(() -> {throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND, "car not found");});
 
-        if(modifyCarModel.plateNumber != null) {
+        if(modifyCarModel.getPlateNumber() != null) {
             car.setPlateNumber(modifyCarModel.getPlateNumber());
         }
 
-        if(modifyCarModel.vin != null) {
+        if(modifyCarModel.getVin() != null) {
             car.setVin(modifyCarModel.getVin());
         }
 
-        if(modifyCarModel.expirationDate != null) {
+        if(modifyCarModel.getExpirationDate() != null) {
             car.setExpirationDate(modifyCarModel.getExpirationDate());
         }
         return new CarDTO(car);

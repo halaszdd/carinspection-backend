@@ -10,10 +10,10 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ModifyInspectionModel {
-    public Long carId;
-    public Long inspectorId;
-    public Long siteId;
-    public LocalDate date;
-    public String result;
-    public String comment;
+    private Long carId;
+    private Long inspectorId;
+    private Long siteId;
+    private LocalDate date;
+    private String result;
+    private String comment;
 }

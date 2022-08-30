@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ModifyUserDetailsModel {
 
-    public String firstname;
-    public String lastname;
-    public String email;
+    private String firstname;
+    private String lastname;
+    private String email;
 }

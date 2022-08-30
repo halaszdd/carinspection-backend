@@ -4,14 +4,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDate;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ModifyCarModel {
+public class ModifyPasswordModel {
 
-    private String plateNumber;
-    private String vin;
-    private LocalDate expirationDate;
+    private String newPassword;
 }

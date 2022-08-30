@@ -115,33 +115,33 @@ public class InspectionController {
                 HttpStatus.NOT_FOUND, "inspection not found"
         );});
 
-        if (modifyInspectionModel.carId != null) {
+        if (modifyInspectionModel.getCarId() != null) {
             inspection.setCar(carRepository.findById(modifyInspectionModel.getCarId()).orElseThrow(() -> {throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "car not found"
             );}));
         }
 
-        if (modifyInspectionModel.inspectorId != null) {
+        if (modifyInspectionModel.getInspectorId() != null) {
             inspection.setInspector(inspectorRepository.findById(modifyInspectionModel.getInspectorId()).orElseThrow(() -> {throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "inspector not found"
             );}));
         }
 
-        if (modifyInspectionModel.siteId != null) {
+        if (modifyInspectionModel.getSiteId() != null) {
             inspection.setSite(siteRepository.findById(modifyInspectionModel.getSiteId()).orElseThrow(() -> {throw new ResponseStatusException(
                     HttpStatus.NOT_FOUND, "site not found"
             );}));
         }
 
-        if (modifyInspectionModel.date != null) {
+        if (modifyInspectionModel.getDate() != null) {
             inspection.setDate(modifyInspectionModel.getDate());
         }
 
-        if (modifyInspectionModel.result != null) {
+        if (modifyInspectionModel.getResult() != null) {
             inspection.setResult(modifyInspectionModel.getResult().toUpperCase());
         }
 
-        if (modifyInspectionModel.comment != null) {
+        if (modifyInspectionModel.getComment() != null) {
             inspection.setComment(modifyInspectionModel.getComment());
         }
         return new InspectionDTO(inspection);

@@ -8,7 +8,7 @@ import hu.unideb.inf.carinspection.data.AppUserRepository;
 import hu.unideb.inf.carinspection.domain.AppUser;
 import hu.unideb.inf.carinspection.domain.Car;
 import hu.unideb.inf.carinspection.domain.Inspection;
-import org.apache.catalina.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -25,8 +25,11 @@ public class UserController {
 
     private final AppUserRepository appUserRepository;
 
-    public UserController(AppUserRepository appUserRepository) {
+    private final PasswordEncoder passwordEncoder;
+
+    public UserController(AppUserRepository appUserRepository, PasswordEncoder passwordEncoder) {
         this.appUserRepository = appUserRepository;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @GetMapping("/api/user/details")
@@ -78,17 +81,29 @@ public class UserController {
         AppUser appUser = appUserRepository.findById(userId).orElseThrow(() -> {throw new ResponseStatusException(
                 HttpStatus.NOT_FOUND, "User not found");});
 
-        if(modifyUserDetailsModel.firstname != null) {
+        if(modifyUserDetailsModel.getFirstname() != null) {
             appUser.setFirstname(modifyUserDetailsModel.getFirstname());
         }
 
-        if (modifyUserDetailsModel.lastname != null) {
+        if (modifyUserDetailsModel.getLastname() != null) {
             appUser.setLastname(modifyUserDetailsModel.getLastname());
         }
 
-        if (modifyUserDetailsModel.email != null) {
+        if (modifyUserDetailsModel.getEmail() != null) {
             appUser.setEmail(modifyUserDetailsModel.getEmail());
         }
         return new UserDetailsDTO(appUser);
+    }
+
+    @PostMapping("/api/user/changePassword")
+    @Transactional
+    public void changePassword(@RequestBody @Valid ModifyPasswordModel modifyPasswordModel,
+                               @AuthenticationPrincipal DefaultUserDetails defaultUserDetails) {
+
+        AppUser appUser = appUserRepository.findById(defaultUserDetails.getAppUser().getId()).orElseThrow( () -> {throw new ResponseStatusException(
+                HttpStatus.BAD_REQUEST, "User not found!"
+        );});
+
+        appUser.setPassword(passwordEncoder.encode(modifyPasswordModel.getNewPassword()));
     }
 }
