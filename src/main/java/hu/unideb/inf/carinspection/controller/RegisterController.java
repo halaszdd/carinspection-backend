@@ -32,9 +32,10 @@ public class RegisterController {
 
     @PostMapping("/register")
     public void register(@RequestBody @Valid RegisterUserModel registerUserModel, @AuthenticationPrincipal DefaultUserDetails defaultUserDetails) {
-        if(defaultUserDetails != null){
+        if(defaultUserDetails != null && !defaultUserDetails.isAdmin()){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Already logged in!");
         }
+
         if(appUserRepository.existsByEmail(registerUserModel.getEmail()))
         {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Email already used!");
