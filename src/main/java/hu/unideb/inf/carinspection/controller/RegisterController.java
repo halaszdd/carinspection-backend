@@ -4,6 +4,8 @@ import hu.unideb.inf.carinspection.DefaultUserDetails;
 import hu.unideb.inf.carinspection.data.AppUserRepository;
 import hu.unideb.inf.carinspection.data.GroupRepository;
 import hu.unideb.inf.carinspection.domain.AppUser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,6 +18,8 @@ import javax.validation.Valid;
 
 @RestController
 public class RegisterController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(RegisterController.class);
 
     private final AppUserRepository appUserRepository;
 
@@ -49,6 +53,6 @@ public class RegisterController {
                 .email(registerUserModel.getEmail())
                 .group(groupRepository.findByGroupName("customer"))
                 .build());
-        System.out.println(registerUserModel);
+        LOGGER.info("Registered user: {}",registerUserModel);
     }
 }
