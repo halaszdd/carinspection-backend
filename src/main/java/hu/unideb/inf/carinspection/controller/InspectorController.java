@@ -11,10 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
@@ -61,5 +58,31 @@ public class InspectorController {
                 .site(site)
                 .build());
         LOGGER.info("Registered Inspector: {}",registerInspectorModel);
+    }
+
+    @PutMapping("/api/inspector/modify/{inspectorId}")
+    @Transactional
+    public InspectorDTO modifyInspector(@RequestBody ModifyInspectorModel modifyInspectorModel, @PathVariable long inspectorId,
+                                        @AuthenticationPrincipal DefaultUserDetails defaultUserDetails) {
+        if(!defaultUserDetails.isAdmin()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not Admin!");
+        }
+
+        Inspector inspector = inspectorRepository.findById(inspectorId).orElseThrow(() -> {throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Inspector not found");});
+
+        if(modifyInspectorModel.getFirstName() !=  null) {
+            inspector.setFirstName(modifyInspectorModel.getFirstName());
+        }
+
+        if(modifyInspectorModel.getLastName() != null) {
+            inspector.setLastName(modifyInspectorModel.getLastName());
+        }
+
+        if (modifyInspectorModel.getSiteId() != null) {
+            inspector.setSite(siteRepository.findById(modifyInspectorModel.getSiteId()).get());
+        }
+
+        return new InspectorDTO(inspector);
     }
 }

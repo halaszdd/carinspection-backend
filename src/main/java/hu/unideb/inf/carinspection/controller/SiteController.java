@@ -8,10 +8,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
@@ -41,5 +38,23 @@ public class SiteController {
         }
         siteRepository.save(Site.builder().name(registerSiteModel.getName()).build());
         LOGGER.info("Registered user: {}",registerSiteModel);
+    }
+
+    @PutMapping("/api/site/modify/{siteId}")
+    @Transactional
+    public SiteDTO modifySite(@RequestBody ModifySiteModel modifySiteModel, @PathVariable long siteId,
+                              @AuthenticationPrincipal DefaultUserDetails defaultUserDetails) {
+        if(!defaultUserDetails.isAdmin()) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not Admin!");
+        }
+
+        Site site = siteRepository.findById(siteId).orElseThrow(() -> {throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "Site not found");});
+
+        if (modifySiteModel.getName() != null) {
+            site.setName(modifySiteModel.getName());
+        }
+
+        return new SiteDTO(site);
     }
 }
