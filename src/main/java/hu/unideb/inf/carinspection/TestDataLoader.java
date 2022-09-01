@@ -38,7 +38,7 @@ public class TestDataLoader implements CommandLineRunner {
         groupRepository.save(Group.builder().groupName("customer").build());
         groupRepository.save(Group.builder().groupName("admin").build());
         Site defaultSite = siteRepository.save(Site.builder().name("No Site").build());
-        Inspector defaultInspector = inspectorRepository.save(Inspector.builder().firstName("No Inspector").build());
+        Inspector defaultInspector = inspectorRepository.save(Inspector.builder().site(defaultSite).firstName("No Inspector").build());
 
         appUserRepository.save(AppUser.builder().username("alice").password(passwordEncoder.encode("123")).firstname("Alice").lastname("Smith").email("alicemail@gmail.com").group(groupRepository.findByGroupName("admin")).build());
         carRepository.save(Car.builder().owner(appUserRepository.findByUsername("alice")).expirationDate(null).vin("01234567899876543").plateNumber("DEF-456").build());
@@ -48,7 +48,7 @@ public class TestDataLoader implements CommandLineRunner {
         siteRepository.save(Site.builder().name("Debrecen BartokBela u").build());
         siteRepository.save(Site.builder().name("Budapest Hungária k.u").build());
         siteRepository.save(Site.builder().name("A 67-es út").build());
-        inspectorRepository.save(Inspector.builder().firstName("Gábor").lastName("Halász").build());
-        inspectorRepository.save(Inspector.builder().firstName("Árpád").lastName("Tóth").build());
+        inspectorRepository.save(Inspector.builder().firstName("Gábor").lastName("Halász").site(defaultSite).build());
+        inspectorRepository.save(Inspector.builder().firstName("Árpád").lastName("Tóth").site(defaultSite).build());
     }
 }
