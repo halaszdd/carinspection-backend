@@ -22,6 +22,7 @@ public class Car {
     private String plateNumber;
     private String vin;
     private LocalDate expirationDate;
-    @OneToMany(mappedBy = "car", cascade = CascadeType.MERGE, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "car", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @ToString.Exclude
     private List<Inspection> inspections;
 }

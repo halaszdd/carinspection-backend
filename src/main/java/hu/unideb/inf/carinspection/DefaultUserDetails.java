@@ -1,14 +1,12 @@
 package hu.unideb.inf.carinspection;
 
 import hu.unideb.inf.carinspection.domain.AppUser;
-import hu.unideb.inf.carinspection.domain.Group;
 import lombok.Getter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 public class DefaultUserDetails implements UserDetails {

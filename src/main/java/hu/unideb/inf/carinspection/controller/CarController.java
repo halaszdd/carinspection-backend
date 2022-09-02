@@ -100,4 +100,18 @@ public class CarController {
         LOGGER.info("Modified car : {}",modifyCarModel);
         return new CarDTO(car);
     }
+
+    @DeleteMapping("/api/car/modify/{carId}")
+    @Transactional
+    public void deleteCar(@PathVariable long carId, @AuthenticationPrincipal DefaultUserDetails defaultUserDetails) {
+        if(!defaultUserDetails.isAdmin()) {
+            throw new AccessDeniedException("403 returned");
+        }
+
+        Car car = carRepository.findById(carId).orElseThrow(() -> {throw new ResponseStatusException(
+                HttpStatus.NOT_FOUND, "car not found");});
+
+        carRepository.delete(car);
+        LOGGER.info("Deleted car : {}",car);
+    }
 }
