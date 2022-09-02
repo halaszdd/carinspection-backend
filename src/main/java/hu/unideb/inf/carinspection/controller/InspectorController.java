@@ -82,7 +82,7 @@ public class InspectorController {
         if (modifyInspectorModel.getSiteId() != null) {
             inspector.setSite(siteRepository.findById(modifyInspectorModel.getSiteId()).get());
         }
-
+        LOGGER.info("Modified inspector: {}",modifyInspectorModel);
         return new InspectorDTO(inspector);
     }
 }

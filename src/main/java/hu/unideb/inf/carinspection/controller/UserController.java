@@ -8,6 +8,8 @@ import hu.unideb.inf.carinspection.data.AppUserRepository;
 import hu.unideb.inf.carinspection.domain.AppUser;
 import hu.unideb.inf.carinspection.domain.Car;
 import hu.unideb.inf.carinspection.domain.Inspection;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
@@ -22,6 +24,8 @@ import java.util.List;
 
 @RestController
 public class UserController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
 
     private final AppUserRepository appUserRepository;
 
@@ -92,6 +96,7 @@ public class UserController {
         if (modifyUserDetailsModel.getEmail() != null) {
             appUser.setEmail(modifyUserDetailsModel.getEmail());
         }
+        LOGGER.info("Modified user: {}",modifyUserDetailsModel);
         return new UserDetailsDTO(appUser);
     }
 
@@ -105,5 +110,6 @@ public class UserController {
         );});
 
         appUser.setPassword(passwordEncoder.encode(modifyPasswordModel.getNewPassword()));
+        LOGGER.info("Modified password: {}",modifyPasswordModel);
     }
 }

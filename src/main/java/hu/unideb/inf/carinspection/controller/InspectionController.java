@@ -8,6 +8,8 @@ import hu.unideb.inf.carinspection.data.SiteRepository;
 import hu.unideb.inf.carinspection.domain.Car;
 import hu.unideb.inf.carinspection.domain.Inspection;
 import hu.unideb.inf.carinspection.domain.Site;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -20,6 +22,8 @@ import java.util.List;
 
 @RestController
 public class InspectionController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(InspectionController.class);
 
     private final InspectionRepository inspectionRepository;
 
@@ -68,6 +72,7 @@ public class InspectionController {
                     .inspector(inspectorRepository.findByFirstName("No Inspector"))
                     .result("PENDING")
                     .build());
+            LOGGER.info("Created inspection: {}",signUpInspectionModel);
             return;
         }
 
@@ -98,6 +103,7 @@ public class InspectionController {
         }
 
         inspection.setResult("WITHDRAWN");
+        LOGGER.info("Withdrawn inspection: {}",inspection);
         return new InspectionDTO(inspection);
     }
 
@@ -144,6 +150,7 @@ public class InspectionController {
         if (modifyInspectionModel.getComment() != null) {
             inspection.setComment(modifyInspectionModel.getComment());
         }
+        LOGGER.info("Modified inspection: {}",modifyInspectionModel);
         return new InspectionDTO(inspection);
     }
 }

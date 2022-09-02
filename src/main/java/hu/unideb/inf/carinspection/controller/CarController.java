@@ -4,6 +4,8 @@ import hu.unideb.inf.carinspection.DefaultUserDetails;
 import hu.unideb.inf.carinspection.data.AppUserRepository;
 import hu.unideb.inf.carinspection.data.CarRepository;
 import hu.unideb.inf.carinspection.domain.Car;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,6 +19,8 @@ import java.util.List;
 
 @RestController
 public class CarController {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(CarController.class);
 
     private final CarRepository carRepository;
 
@@ -45,6 +49,7 @@ public class CarController {
                 .vin(registerCarModel.getVin())
                 .expirationDate(registerCarModel.getExpirationDate())
                 .build());
+        LOGGER.info("Registered car: {}",registerCarModel);
     }
 
     @GetMapping("/api/car/{carId}")
@@ -92,6 +97,7 @@ public class CarController {
         if(modifyCarModel.getExpirationDate() != null) {
             car.setExpirationDate(modifyCarModel.getExpirationDate());
         }
+        LOGGER.info("Modified car : {}",modifyCarModel);
         return new CarDTO(car);
     }
 }
