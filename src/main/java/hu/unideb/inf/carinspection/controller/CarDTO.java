@@ -9,12 +9,15 @@ import java.time.LocalDate;
 public class CarDTO {
 
     private long id;
+
+    private long ownerId;
     private String plateNumber;
     private String vin;
     private LocalDate expirationDate;
 
     public CarDTO(Car car) {
         id = car.getId();
+        ownerId = car.getOwner().getId();
         plateNumber = car.getPlateNumber();
         vin = car.getVin();
         expirationDate = car.getExpirationDate();
